@@ -6,7 +6,6 @@
 				"name": "mysqlreader",
 				"parameter": {
 					"column": ["*"],
-					"where": "id>=3",
 					"connection": [
 					{
 						"jdbcUrl": [
@@ -29,7 +28,7 @@
 					"fieldDelimiter": "\t",
 					"fileName": "$table_name",
 					"fileType": "text",
-					"path": "/$table_name",
+					"path": "/origin_data/gmall/db/$table_name",
 					"writeMode": "append"
 				}
 			}
