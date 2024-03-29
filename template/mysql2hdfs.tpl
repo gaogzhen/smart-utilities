@@ -22,13 +22,13 @@
 			"writer": {
 				"name": "hdfswriter",
 				"parameter": {
-					"column": ["*"],
+					"column": [$COLUMN],
 					"compress": "gzip",
 					"defaultFS": "hdfs://node1:8020",
 					"fieldDelimiter": "\t",
 					"fileName": "$table_name",
 					"fileType": "text",
-					"path": "/origin_data/gmall/db/$table_name",
+					"path": "/origin_data/gmall/db/$DIRNAME",
 					"writeMode": "append"
 				}
 			}

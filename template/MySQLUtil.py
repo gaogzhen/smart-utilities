@@ -83,7 +83,7 @@ class MySQLUtil:
         table = "'" + table + "'"
         sql = """
         SELECT 
-            column_name,column_type,ordinal_position,column_comment,column_default 
+            column_name,data_type,ordinal_position,column_comment,column_default 
         FROM 
             information_schema.COLUMNS 
         WHERE 
@@ -136,24 +136,24 @@ class MySQLUtil:
 
 
 if __name__ == "__main__":
-    mysqlUtil = MySQLUtil(host="127.0.0.1", user="root", passwd="123456", db="gmall")
+    mysqlUtil = MySQLUtil(host='node1', user="root", passwd="123456", db="gmall")
     mysqlUtil.get_version()
     dbs = mysqlUtil.list_databases()
     print(dbs)
     conn = mysqlUtil.get_conn()
     mysqlUtil.select_db("gmall")
-    print(type(conn.db), conn.db)
-    databases = mysqlUtil.list_databases()
-    print(type(databases), databases)
-    tables = mysqlUtil.list_tables()
-    print(type(tables), tables)
-    sql = "SELECT * FROM activity_info"
-    result = mysqlUtil.execute(sql)
-    for i in result:
-        print(i)
+    # print(type(conn.db), conn.db)
+    # databases = mysqlUtil.list_databases()
+    # print(type(databases), databases)
+    # tables = mysqlUtil.list_tables()
+    # print(type(tables), tables)
+    # sql = "SELECT * FROM activity_info"
+    # result = mysqlUtil.execute(sql)
+    # for i in result:
+    #     print(i)
     result = mysqlUtil.table_metadata("gmall", "activity_info")
     for i in result:
-        print(i)
-    result = mysqlUtil.get_table_fields("gmall", "activity_info")
-    for i in result:
-        print(i)
+        print(i[0],'==',i[1],'===', type(i))
+    # result = mysqlUtil.get_table_fields("gmall", "activity_info")
+    # for i in result:
+    #     print(i)
