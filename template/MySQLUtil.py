@@ -1,15 +1,28 @@
 # -*- encoding: utf-8 -*-
+"""
+mysql工具类，主要功能如下：
+1. 构造连接mysql
+2. 获取设置基础信息：选择数据库、查询数据库版本
+3. 查询：查询一条数据、查询多条数据
+4. 新增、修改、删除
+"""
 
 import pymysql
 
 
 class MySQLUtil:
-    """
-    MySQL工具类
-    """
 
     def __init__(self, host="127.0.0.1", user=None, passwd=None, db=None, charset="utf8", *args, **kwargs):
-        """构造函数"""
+        """
+        构造函数
+        :param host: 主机地址
+        :param user: 用户名
+        :param passwd: 密码
+        :param db: 数据库名
+        :param charset: 字符集
+        :param args: 参数
+        :param kwargs:
+        """
         self.__host = host
         self.__user = user
         self.__passwd = passwd
@@ -31,7 +44,11 @@ class MySQLUtil:
         return self.__conn.cursor(cursor)
 
     def select_db(self, db):
-        """选择数据库"""
+        """
+        选择数据库
+        :param db: 数据库名
+        :return:
+        """
         self.__conn.select_db(db)
 
     def list_databases(self, args=None):
