@@ -1,4 +1,11 @@
-# 通过datax把mysql中数据全量同步到hdfs，一个表对应一个同步文件。通过模版文件生成job
+"""
+读取mysql元数据，通过模板生成datax任务job：同步全量mysql数据到hdfs，调用shell执行领料
+1. 基础配置信息
+    1.1 mysql与hdfs数据类型对应map
+2. 读取mysql元数据信息，通过模板文件生成job文件
+3. 执行shell命令，运行datax任务
+"""
+
 import os
 import pathlib
 import subprocess
@@ -25,8 +32,14 @@ type_mysql_hdfs = {
 }
 
 
-# 读取mysql数据，生成datax gmall
 def tmp2job(db_util, tmp_file):
+    """
+    读取mysql数据，用任务模板生成datax 任务
+        job：全量同步mysql数据到hdfs
+    :param db_util: 数据库工具
+    :param tmp_file: 模板文件
+    :return:
+    """
     # 获取模版文件
     tmp_file = pathlib.Path(__file__).parent.joinpath(tmp_file)
     # 生成文件路径
@@ -62,6 +75,11 @@ def tmp2job(db_util, tmp_file):
 
 # 执行job脚本
 def execute_shell(db_util):
+    """
+    执行shell命令：运行datax任务
+    :param db_util: 数据库工具
+    :return:
+    """
     # cmd_ls = 'ls /export/server/datax/job/gmall'
     # name = subprocess.check_output(cmd_ls, shell=True)
     # names = str(name, encoding='utf-8').split('\n')[:-1]
@@ -73,9 +91,9 @@ def execute_shell(db_util):
             continue
         # 确保hdfs父路径存在
         hdfs_mkdir = 'hdfs dfs -mkdir -p /origin_data/gmall/db/' + os.path.splitext(name)[0]
-        print('-'*5, hdfs_mkdir,'-'*5,name)
+        # print('-'*5, hdfs_mkdir,'-'*5,name)
         ret = subprocess.check_call(hdfs_mkdir, shell=True)
-        print('---ret--',ret)
+        # print('---ret--',ret)
         # 执行datax job任务
         commond = "python /export/server/datax/bin/datax.py  /export/server/datax/job/gmall/" + name + '.json'
         # print(commond)
