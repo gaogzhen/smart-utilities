@@ -1,33 +1,22 @@
 # -*- encoding: utf-8 -*-
-"""
-mysql工具类，主要功能如下：
-1. 构造连接mysql
-2. 获取设置基础信息：选择数据库、查询数据库版本
-3. 查询：查询一条数据、查询多条数据
-4. 新增、修改、删除
-"""
 
 import pymysql
 
 
 class MySQLUtil:
+    """
+    MySQL工具类
+    """
 
-    def __init__(self, host="127.0.0.1", user=None, passwd=None, db=None, charset="utf8", *args, **kwargs):
-        """
-        构造函数
-        :param host: 主机地址
-        :param user: 用户名
-        :param passwd: 密码
-        :param db: 数据库名
-        :param charset: 字符集
-        :param args: 参数
-        :param kwargs:
-        """
+    def __init__(self, host="127.0.0.1", user=None, passwd=None, db=None, charset="utf8", autocommit=1, *args,
+                 **kwargs):
+        """构造函数"""
         self.__host = host
         self.__user = user
         self.__passwd = passwd
         self.__db = db
-        self.__conn = pymysql.connect(host=host, user=user, passwd=passwd, db=db, charset=charset, *args, **kwargs)
+        self.__conn = pymysql.connect(host=host, user=user, passwd=passwd, db=db, charset=charset,
+                                      autocommit=autocommit, *args, **kwargs)
         self.__cursor = self.__conn.cursor()
 
     def __del__(self):
@@ -44,11 +33,7 @@ class MySQLUtil:
         return self.__conn.cursor(cursor)
 
     def select_db(self, db):
-        """
-        选择数据库
-        :param db: 数据库名
-        :return:
-        """
+        """选择数据库"""
         self.__conn.select_db(db)
 
     def list_databases(self, args=None):
@@ -113,8 +98,8 @@ class MySQLUtil:
         """查询单条数据"""
         result = None
         try:
-            self.cursor.execute(sql, args)
-            result = self.cursor.fetchone()
+            self.__cursor.execute(sql, args)
+            result = self.__cursor.fetchone()
 
         except Exception as e:
             print(e)
@@ -124,8 +109,8 @@ class MySQLUtil:
         """查询多条数据"""
         list_result = ()
         try:
-            self.cursor.execute(sql, args)
-            list_result = self.cursor.fetchall()
+            self.__cursor.execute(sql, args)
+            list_result = self.__cursor.fetchall()
 
         except Exception as e:
             print(e)
@@ -146,14 +131,14 @@ class MySQLUtil:
     def __edit(self, sql):
         count = 0
         try:
-            count = self.cursor.execute(sql)
+            count = self.__cursor.execute(sql)
         except Exception as e:
             print(e)
         return count
 
 
 if __name__ == "__main__":
-    mysqlUtil = MySQLUtil(host="自己的ip或者域名", user='自己的用户名', passwd='自己的密码', db='自己的数据库')
+    mysqlUtil = MySQLUtil(host='node1', user="root", passwd="123456", db="gmall")
     mysqlUtil.get_version()
     dbs = mysqlUtil.list_databases()
     print(dbs)
@@ -170,7 +155,7 @@ if __name__ == "__main__":
     #     print(i)
     result = mysqlUtil.table_metadata("gmall", "activity_info")
     for i in result:
-        print(i[0],'==',i[1],'===', type(i))
+        print(i[0], '==', i[1], '===', type(i))
     # result = mysqlUtil.get_table_fields("gmall", "activity_info")
     # for i in result:
     #     print(i)

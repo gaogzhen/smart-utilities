@@ -102,7 +102,7 @@ def execute_shell(db_util):
 
 
 if __name__ == '__main__':
-    db_util = util.MySQLUtil(host="node1", user="root", passwd="123456", db="gmall")
+    db_util = util.MySQLUtil(host="自己的ip或者域名", user='自己的用户名', passwd='自己的密码', db='自己的数据库')
     tmp2job(db_util, tmp_file='mysql2hdfs.tpl')
     execute_shell(db_util)
 

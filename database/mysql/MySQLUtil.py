@@ -96,8 +96,8 @@ class MySQLUtil:
         """查询单条数据"""
         result = None
         try:
-            self.cursor.execute(sql, args)
-            result = self.cursor.fetchone()
+            self.__cursor.execute(sql, args)
+            result = self.__cursor.fetchone()
 
         except Exception as e:
             print(e)
@@ -107,8 +107,8 @@ class MySQLUtil:
         """查询多条数据"""
         list_result = ()
         try:
-            self.cursor.execute(sql, args)
-            list_result = self.cursor.fetchall()
+            self.__cursor.execute(sql, args)
+            list_result = self.__cursor.fetchall()
 
         except Exception as e:
             print(e)
@@ -129,7 +129,7 @@ class MySQLUtil:
     def __edit(self, sql):
         count = 0
         try:
-            count = self.cursor.execute(sql)
+            count = self.__cursor.execute(sql)
         except Exception as e:
             print(e)
         return count
