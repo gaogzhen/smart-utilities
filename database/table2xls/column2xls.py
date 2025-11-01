@@ -48,7 +48,7 @@ def column2xls(link):
     for table in tables:
         ret = []
         # print(table[0])
-        sql_column = "select column_name,column_type,column_default,column_comment,data_type from columns where table_name='" + \
+        sql_column = "select column_name,column_type,column_default,column_comment,data_type from columns where table_schema='sports_industry' and  table_name='" + \
                      table[0] + "'"
         columns = link.query_all(sql_column)
         for column in columns:
@@ -66,5 +66,5 @@ def column2xls(link):
 
 
 if __name__ == '__main__':
-    link = mysql_util.MySQLUtil(host="自己的ip或者域名", user='自己的用户名', passwd='自己的密码', db='自己的数据库')
+    link = mysql_util.MySQLUtil(host="node2231", user='root', passwd='mysql@G2ZH', db='information_schema')
     column2xls(link)
