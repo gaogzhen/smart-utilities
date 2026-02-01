@@ -22,7 +22,7 @@ async def main() -> None:
     info = await user.get_self_history(1, 100, credential)
     # print(len(info))
     # lists = await me.get_self_history()
-    text = '欢迎小伙伴一起学习交流，有做笔记和代码练习，头像有联系方式和地址，一起加油啊[脱单doge][脱单doge][脱单doge]'
+    text = '欢迎小伙伴一起学习交流，有做笔记和代码练习，一起加油啊[脱单doge][脱单doge][脱单doge]'
     for v in info:
         time.sleep(2)
         await comment.send_comment(text=text, oid=(v['aid']), type_=CommentResourceType.VIDEO, credential=credential)
