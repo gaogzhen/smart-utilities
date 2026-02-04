@@ -1,0 +1,12 @@
+# Playwright 浏览器（项目内安装）
+.playwright-browsers/
+
+# 领取历史
+claim_history.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
