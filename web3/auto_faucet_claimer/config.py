@@ -8,24 +8,29 @@ WALLET_ADDRESS = "0x1b085cB185CE7340731D641AEA498F49c5F6d85b"
 PROXY = os.getenv("PROXY_URL")  # 格式如: http://user:pass@host:port
 
 # 水龙头任务列表 (手动收集和配置的核心部分)
+# 常用测试网水龙头参考:
+#   - Ethereum Sepolia: https://sepolia-faucet.pk910.de/ 或 https://www.alchemy.com/faucets/ethereum-sepolia
+#   - Avalanche Fuji:   https://core.app/tools/testnet-faucet/?subnet=avax&chain=fuji
+#   - Polygon Amoy:     https://faucet.polygon.technology/
+#   - Chainlink:        https://faucets.chain.link/
+# 添加新任务时需在浏览器中确认选择器与成功文案，步骤支持: type / click / select / wait_for_text / solve_captcha
+# 若页面需先连接 MetaMask，可配置 wallet_connect：领取前会检测是否已连接，未连接则自动点击连接并处理 MetaMask 弹窗
 FAUCET_TASKS = [
 {
         "name": "Core.app Avalanche Fuji Faucet",
         "url": "https://core.app/tools/testnet-faucet/?subnet=avax&chain=fuji",
         "network": "Avalanche Fuji (C-Chain)",
+        # 领取前检测并自动连接 MetaMask（可选）
+        "wallet_connect": {
+            "connect_button_selector": "button:has-text('Connect Wallet')",
+            "connected_indicator": {"type": "text_in_page", "content": "Connected"},
+            "metamask_popup": {
+                "next_button": "button:has-text('Next')",
+                "connect_button": "button:has-text('Connect')",
+                "timeout": 15000,
+            },
+        },
         "steps": [
-            # {
-            #     "action": "click",
-            #     "selector": "button:has-text('Connect Wallet')",  # 连接钱包按钮
-            #     "description": "点击连接钱包按钮",
-            #     "optional": True  # 如果已连接，此步骤可跳过
-            # },
-            # {
-            #     "action": "wait_for_text",
-            #     "text": "Connected",  # 等待连接成功字样
-            #     "timeout": 15,
-            #     "description": "等待钱包连接成功"
-            # },
             {
                 "action": "click",
                 "selector": "button:has-text('Next')",
@@ -35,6 +40,16 @@ FAUCET_TASKS = [
                 "action": "click",
                 "selector": "button:has-text('Next')",
                 "description": "选择token"
+            },
+            {
+                "action": "type",
+                "selector": "input[placeholder*='Address'], input[type='text']",
+                "value": WALLET_ADDRESS,
+                "description": "输入钱包地址（若页面已显示地址可跳过）"
+            },
+            {
+                "action": "solve_captcha",
+                "description": "reCAPTCHA 人机验证：在浏览器中完成验证后按回车继续"
             },
             {
                 "action": "click",
