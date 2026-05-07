@@ -1,25 +1,28 @@
 import asyncio
-import time
 import random
-
-import browser_cookie3
-from bilibili_api import Credential, user,favorite_list,comment
+import time
+from datetime import datetime
+"""
+ print不缓存 自动刷新
+方法二
+# 如果你有很多 print 语句并且不想一一修改，也可以在脚本开头添加一行代码，强制所有 print 都自动刷新：
+import functools
+print = functools.partial(print, flush=True)
+"""
+from bilibili_api import user, favorite_list, comment
 from bilibili_api.comment import CommentResourceType
-from bilibili_api import request_settings
 
 from common import get_credential
 
-# 防防控1：代理池。没有代理池不考虑并行执行
+# 防风控1：代理池。没有代理池不考虑并行执行
 # proxies = [
 #     'http://120.26.0.11:8880',
 #     'http://39.101.132.59:8443',
 #     'http://222.213.85.99:9002',
 #     'http://139.196.46.164:8888'
 # ]
-exclude_folders = ['默认收藏夹', '饭菜', '思考','娱乐',
-                   '产品', '移动开发', 'web3', 'gis', '运维', '云计算', 'go', '中间件',
-                   '数据库', '人工智能']
-text = '欢迎小伙伴一起学习交流，有做笔记和代码练习，一起加油啊[脱单doge][脱单doge][脱单doge]'
+exclude_folders = ['默认收藏夹']
+text = '欢迎小伙伴一起学习交流，有做笔记和代码练习，一起加油啊,头像有联系方式[脱单doge][脱单doge][脱单doge]'
 
 async def main() -> None:
     # 获取用户信息
@@ -27,6 +30,8 @@ async def main() -> None:
     my_info = await user.get_self_info(credential)
     my_mid = my_info['mid']
 
+    # 计数器
+    count = 1
     # 获取视频收藏夹
     folders = await favorite_list.get_video_favorite_list(uid=my_mid, credential=credential)
     for folder in folders['list']:
@@ -43,12 +48,12 @@ async def main() -> None:
                     try:
                         await comment.send_comment(text=text, oid=media.get('id'), type_= CommentResourceType.VIDEO,
                                                credential=credential)
-                        print(f'{folder.get('title')}:{ (i-1)*20 + idx}: {media.get("title")} == success')
+                        print(f'no: {count}-{folder.get('title')}-{ (i-1)*20 + idx}, title: {media.get("title")}, status: success')
                         # 防风控2：随机延迟时间
                         time.sleep(random.uniform(5, 10))
                     except Exception as e:
-                        print(e)
-
+                        print(f'no: {count}-{folder.get('title')}-{ (i-1)*20 + idx}, title: {media.get("title")},time:{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}, status: failed, exception: {e}')
+                    count += 1
                 # 是否还有下一页
                 if not videos.get('has_more'):
                     break
